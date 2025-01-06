@@ -20,4 +20,20 @@ def connect_db():
      except Exception as e:
         print("Error connecting to database",e)
         return None
-connect_db()
+#connect_db()
+
+def add_employee(name,position,salary):
+   query="INSERT INTO employees (name,position,salary) VALUES(%s,%s,%s)"
+   conn=connect_db()
+   if conn:
+      try:
+         with conn.cursor() as cursor:
+            cursor.execute(query,(name,position,salary))
+            conn.commit()
+            print("Employee added successfully...")
+      except Exception as e:
+         print("Error adding employee",e)
+      finally:
+         conn.close()
+add_employee('abc','HR',20000)
+
