@@ -35,5 +35,37 @@ def add_employee(name,position,salary):
          print("Error adding employee",e)
       finally:
          conn.close()
-add_employee('abc','HR',20000)
+#add_employee('xyz','Manager',50000)
 
+def view_employees():
+   query="SELECT * FROM employees "
+   conn=connect_db()
+   if conn:
+      try:
+         with conn.cursor() as cursor:
+            cursor.execute(query)
+            employees=cursor.fetchall()
+            print("\n Employee List:")
+            for emp in employees:
+               print(f"Id:{emp[0]},Name:{emp[1]},Position:{emp[2]},Salary:{emp[3]}")
+      except Exception as e:
+         print("Error retriving employees",e)
+      finally:
+         conn.close()
+view_employees()
+
+def update_employees(empid,name=None,position=None,salary=None):
+   query="UPDATE employees SET name=COALESCE(%s,name),position=COALESCE(%s,position),salary=COALESCE(%s,salary) WHERE id=%s"
+   conn=connect_db()
+   if conn:
+      try:
+         with conn.cursor() as cursor:
+            cursor.execute(query,(name,position,salary,empid))
+            conn.commit()
+            print("Employee updated successfully")
+      except Exception as e:
+         print("Error updating employee",e)
+      finally:
+         conn.close()
+
+#update_employees(2,"aarti","student",00)
